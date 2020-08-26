@@ -31,10 +31,6 @@ hashes = 1    #打印树冠 #号数
 
 treez = treeheight -1 #树桩空格数
 
-# if treeheight == 0 or treeheight < 0:
-#     print('你逗我玩呢，树会没有高度或是长在地面以下？')
-    
-
 while treeheight > 0:
     for i in range(sapces):
         print(' ' , end='')
@@ -48,7 +44,7 @@ while treeheight > 0:
 
     hashes += 2
 
-# 这以下，打印树桩，for 循环打印空格数   先打空格，再打#号
+# 这以下，打印树桩，for 循环打印空格数，先打空格，再打#号
 for i in range(treez):
     print(' ',end='')
     
