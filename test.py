@@ -25,3 +25,13 @@ def add(a, b):
     return '计算两个数的和： {} + {} = {}'.format(a, b, a+b)
 
 print(add(30, 40))
+
+
+
+
+nb = 1
+while True:
+    nb = nb + 1
+    print(nb)
+    if nb == 100:
+        break
