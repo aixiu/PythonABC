@@ -2,6 +2,10 @@
 # -*- coding: utf-8 -*-
 #@Author : Aixiu
 
+
+# 视频地址 https://www.bilibili.com/video/BV1i54y1h75W
+
+
 import requests
 
 query = input('输入一个内容：')
