@@ -39,7 +39,7 @@ with open("./test.txt", mode="r", encoding="utf-8") as f1, \
         f2.write("\n")
              
          
-time.sleep(2)
+time.sleep(2)  # 程序休眠2秒
 # 删除源文件
 os.remove("./test.txt")
 time.sleep(2)
