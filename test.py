@@ -35,3 +35,8 @@ while True:
     print(nb)
     if nb == 100:
         break
+
+
+# 打印所有 unicode 编码 运行快显示卡
+for i in range(65536):
+    print("{} ".format(chr(i)), end="")
