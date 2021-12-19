@@ -37,6 +37,6 @@ while True:
         break
 
 
-# 打印所有 unicode 编码 运行快显示卡
+# 打印所有 unicode 编码 运行快显示卡顿
 for i in range(65536):
     print("{} ".format(chr(i)), end="")
