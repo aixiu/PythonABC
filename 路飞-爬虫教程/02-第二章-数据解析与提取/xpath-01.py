@@ -48,3 +48,12 @@ xml = """
     </partner>
 </book>
 """
+
+tree = etree.XML(xml)
+# result = tree.xpath("/book")  # /表示层级关系. 第一个/是根节点
+# result = tree.xpath("/book/name")
+# result = tree.xpath("/book/name/text()")  # text() 拿文本
+# result = tree.xpath("/book/author//nick/text()")  # // 后代
+# result = tree.xpath("/book/author/*/nick/text()")  # * 任意的节点. 通配符
+result = tree.xpath("/book//nick/text()")
+print(result)
