@@ -15,4 +15,5 @@ while count < 3:
     else:
         print('输入的什么鬼,看不懂提示吗？')
         count += 1
-print('三次机会都输不对，捣乱的吧')
+        if count == 3:
+            print('三次机会都输不对，捣乱的吧')
