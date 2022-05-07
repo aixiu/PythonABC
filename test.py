@@ -34,13 +34,9 @@ while True:
     nb = nb + 1
     print(nb)
     if nb == 100:
-<<<<<<< HEAD
-        break
-=======
         break
 
 
 # 打印所有 unicode 编码 运行快显示卡顿
 for i in range(65536):
     print("{} ".format(chr(i)), end="")
->>>>>>> 691bd2c375a0bf6ae5d57b4bbdb4622e2c5a29d4
