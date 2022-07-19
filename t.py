@@ -19,3 +19,9 @@ for i in num:
     string_tel.append(lists[i])
 
 print('联系方式：{}'.format("".join(map(str,string_tel))))
+
+
+
+import os
+
+print(os.path.abspath(__file__))
