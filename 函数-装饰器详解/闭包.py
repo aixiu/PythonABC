@@ -3,18 +3,23 @@
 #@Author : Aixiu
 
 """
-
+闭包：
+    1、可以让一个变量常驻于内存
 """
 
 def func():
     a = 10
     def inner():
-        print(a)
+        nonlocal a
+        a += 1
         return a
-    return(inner)
+    return inner
 
 ret = func()
 
 # inner => ret => 什么是时候执行
 
-ret()
+r1 = ret()
+print(r1)
+r2 = ret()
+print(r2)
