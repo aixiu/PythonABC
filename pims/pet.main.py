@@ -17,10 +17,10 @@ def main():
         action = input("请选择希望执行的操作： ")
         if action in ["1", "2", "3"]:
             if action == "1":
-                # TODO(4815563@qq.com) 1.新增宠物信息
+                # (4815563@qq.com) 1.新增宠物信息
                 new_pet()
             elif action == "2":
-                # TODO 2.显示全部信息
+                # 2.显示全部信息
                 show_all()
             elif action == "3":
                 # TODO 3.搜索宠物信息
