@@ -17,16 +17,17 @@ def main():
         action = input("请选择希望执行的操作： ")
         if action in ["1", "2", "3"]:
             if action == "1":
-                # (4815563@qq.com) 1.新增宠物信息
+                # 1.新增宠物信息
                 new_pet()
             elif action == "2":
                 # 2.显示全部信息
                 show_all()
             elif action == "3":
-                # TODO 3.搜索宠物信息
+                # 3.搜索宠物信息
                 search_pet()
         elif action == "0":
             print("欢迎再次使用【宠物信息管理系统】")
+            input("按下回车，关闭窗口。")
             break
         else:
             print("您输入的不正确请重新选择")

@@ -10,8 +10,8 @@ pets_info = []  # 用来保存宠物信息
 # 测试数据
 # pets_info = [{'nickname': '豆豆', 'age': '2', 'sex': '雄性', 'weight': '12'}]  # 用来保存宠物信息
 
-pets_info = [{'nickname': '豆豆', 'age': '2', 'sex': '雄性', 'weight': '12'}, 
-             {'nickname': '憨憨', 'age': '3', 'sex': '雌性', 'weight': '15'}]  # 用来保存宠物信息
+# pets_info = [{'nickname': '豆豆', 'age': '2', 'sex': '雄性', 'weight': '12'}, 
+            #  {'nickname': '憨憨', 'age': '3', 'sex': '雌性', 'weight': '15'}]  # 用来保存宠物信息
 
 header = ["昵称", "年龄", "性别", "体重"]
 
@@ -83,21 +83,41 @@ def deal_pet(find_pet):
     处理查找到的宠物信息
 
     :param find_pet: 查找到的宠物信息
-    :type find_pet: _type_
     """
     print()
     action = input("请选择要执行的操作：[1] 修改 [2] 删除 [3] 返回上级菜单 ")
     if action == "1":
         # 执行修改操作
-        find_pet["nickname"] = input("新的昵称： ")
-        find_pet["age"] = input("新的年龄： ")
-        find_pet["sex"] = input("新的性别（雄性/雌性）： ")
-        find_pet["weight"] = input("新的体重（kg）： ")
+        # find_pet["nickname"] = input("新的昵称： ")
+        # find_pet["age"] = input("新的年龄： ")
+        # find_pet["sex"] = input("新的性别（雄性/雌性）： ")
+        # find_pet["weight"] = input("新的体重（kg）： ")
+        find_pet["nickname"] = input_pet_info(find_pet["nickname"], "新的昵称：[回车不修改] ")
+        find_pet["age"] = input_pet_info(find_pet["age"], "新的年龄：[回车不修改] ")
+        find_pet["sex"] = input_pet_info(find_pet["sex"], "新的性别（雄性/雌性）：[回车不修改] ")
+        find_pet["weight"] = input_pet_info(find_pet["weight"],"新的体重（kg）：[回车不修改] ")
         print(f"【修改{find_pet['nickname']}宠物信息成功】")
     elif action == "2":
         # 执行删除操作
         pets_info.remove(find_pet)
         print(f"【删除{find_pet['nickname']}宠物信息成功】")
+        
+def input_pet_info(pet_value, tip):
+    """
+    输入宠物信息的功能扩展
+
+    :param pet_value: 字典中原有的值
+    :param tip: 输入的提示文字内容
+    :return: 如果用户输入了内容，就返回新的内容，否则返回字典中原有的值
+    """
+    # 1.提示用户输入信息
+    result = input(tip)
+    # 2.用户输入的内容不为空，返回输入的值
+    if len(result) > 0:
+        return result
+    # 3.如果用户输入的为空，返回宏物信息原有的值
+    else:
+        return pet_value
 
 def search_pet():
     """
