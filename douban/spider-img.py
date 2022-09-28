@@ -7,15 +7,18 @@ import re  # 正则表达式，进行文字匹配
 import urllib.request, urllib.error  # 制定URL，获取网页数据
 import xlwt  # 进行 excel 文件写入操作   Excel的写插件  安装命令：pip install xlwt；  Excel的读取插件  安装命令：pip install xlrd
 import sqlite3  #  进行SQLite数据库操作
+import os
 
 def main():
     baseurl = "https://movie.douban.com/top250?start={}"  # 基础 URL
     # 1.爬取网页
     datalist = getData(baseurl)
-    savepath = f"./豆瓣电影Top250.xls"
+    # savepath = f"./豆瓣电影Top250.xls"
+    dbpath = f"./movie.db"
     
     # 3.保存数据到 excel
-    saveData(datalist, savepath)
+    # saveData(datalist, savepath)
+    saveDataDB(datalist, dbpath)
     
     # askURL("https://movie.douban.com/top250?start=0")
 
@@ -116,7 +119,7 @@ def askURL(url):
             
     return html
 
-# 保存数据
+# 保存数据到 excel
 def saveData(datalist, savepath):
     print("save....")
     book = xlwt.Workbook(encoding="utf-8")  # 创建kook 对象 相当于一个excel文件
@@ -134,7 +137,140 @@ def saveData(datalist, savepath):
 
     book.save(savepath)   # 保存到文件
     
+# 保存数据到 SQLITE数据库
+def saveDataDB(datalist, dbpath):
+    init_db(dbpath)
+    conn = sqlite3.connect(dbpath)
+    cur = conn.cursor()
+    
+    for data in datalist:
+        for index in range(len(data)):
+            if index == 4 or index ==5:
+                continue
+            data[index] = '"'+data[index]+'"'  # 给每一条数据加上双引号
+        sql = '''
+            insert into movie250 (info_link, pic_link, cname, ename, score, rated, instroduction, info)
+            values(%s)
+        '''%",".join(data)
+        
+        print(sql)
+            
+        cur.execute(sql)   # 执行上边的语句
+        conn.commit()  # 提交数据
+    cur.close()
+    conn.close()
+
+# 初始化数据库
+def init_db(dbpath):
+    # id表示属性名  integer表示属性类型  primary key表示这个属性是主键  autoincrement表示这个值是自动增加的， 默认开始值是1
+    sql = '''
+        create table movie250
+        (
+            id integer primary key autoincrement,  
+            info_link text,
+            pic_link text,
+            cname varchar,
+            ename varchar,
+            score numeric,
+            rated numeric,
+            instroduction text,
+            info text
+            
+        )
+    '''  # 创建数据表
+    conn = sqlite3.connect(dbpath)
+    cursor = conn.cursor()
+    cursor.execute(sql)
+    conn.commit()
+    conn.close()
+
+
+# 保存文件(图片,音视频等)
+# 1.爬取并解析图片的路径,直接保存图片
+def save1File():
+    saveDir = f"./movie_poster/" # 保存电影海报的路径,方便修改
+    img_src = "https://img2.doubanio.com/view/photo/s_ratio_poster/public/p480747492.jpg"
+    path_list = img_src.split("/")
+    # print("{}{}".format(saveDir, path_list[-1]))
+    objPath = "{}{}".format(saveDir, path_list[-1])
+    
+    # 判断文件夹是否存在
+    # 方法1:
+    # from pathlib import Path
+    # objDir = Path(saveDir) 
+    # if objDir.is_dir() == False:
+    #     pass
+    
+    # 方法2:
+    isExists = os.path.exists(saveDir)  # 获取目标文件夹的状态
+    # os.path.exists()就是判断括号里的文件是否存在的意思，括号内的可以是文件路径。
+    if not isExists:  # 如果文件夹不存在
+        os.mkdir(saveDir)   # 创建文件夹
+    
+    img = urllib.request.urlopen(img_src)
+    
+    with open(objPath, "ab") as f:
+        f.write(img.read())
+
+
+
+# 2.读取数据库中图片路径和电影名称
+
+def saveFile(dbpath):
+    saveDir = f"./movie_poster/" # 保存电影海报的路径,方便修改
+    # 方法2:
+    isExists = os.path.exists(saveDir)  # 获取目标文件夹的状态
+    # os.path.exists()就是判断括号里的文件是否存在的意思，括号内的可以是文件路径。
+    if not isExists:  # 如果文件夹不存在
+        os.mkdir(saveDir)   # 创建文件夹
+        
+    # 从数据库读取图片路径和电影名称
+    conn = sqlite3.connect(dbpath)
+    cur = conn.cursor()
+    sql = "select pic_link, cname from movie250"
+    records = cur.execute(sql)
+    res = records.fetchall()
+    # print(res, type(res))
+    cur.close()
+    conn.close()
+    
+    head = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.50"
+    }
+    
+    # 逐一爬取并保存图片
+    for movie in res:
+        img_src = movie[0]
+        
+        # 截取图片后比缀
+        srclist = img_src.split(".")
+        suffix = srclist[-1]
+        # print(suffix)
+        objPath = saveDir + movie[1] + "." + suffix
+        print(objPath)
+        # objPath = saveDir + movie[1] + ".jpg"
+        # print(objPath)
+        
+        
+        try:
+            req = urllib.request.Request(url=img_src, headers=head)
+            img = urllib.request.urlopen(req)
+        
+            with open(objPath, "ab") as f:
+                f.write(img.read())
+        except BaseException as e:
+            print(e.reason)
+            
+        
+        
+        
+
+
 if __name__ == '__main__':  # 当程序执行时
     # 调用函数
-    main()
-    print("爬取完毕!")
+    # main()
+    # init_db("movietest.db")
+    # print("爬取完毕!")
+    
+    # save1File()
+    saveFile("movie.db")

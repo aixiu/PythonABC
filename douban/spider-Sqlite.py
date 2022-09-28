@@ -12,10 +12,12 @@ def main():
     baseurl = "https://movie.douban.com/top250?start={}"  # 基础 URL
     # 1.爬取网页
     datalist = getData(baseurl)
-    savepath = f"./豆瓣电影Top250.xls"
+    # savepath = f"./豆瓣电影Top250.xls"
+    dbpath = f"./movie.db"
     
     # 3.保存数据到 excel
-    saveData(datalist, savepath)
+    # saveData(datalist, savepath)
+    saveDataDB(datalist, dbpath)
     
     # askURL("https://movie.douban.com/top250?start=0")
 
@@ -116,7 +118,7 @@ def askURL(url):
             
     return html
 
-# 保存数据
+# 保存数据到 excel
 def saveData(datalist, savepath):
     print("save....")
     book = xlwt.Workbook(encoding="utf-8")  # 创建kook 对象 相当于一个excel文件
@@ -134,7 +136,55 @@ def saveData(datalist, savepath):
 
     book.save(savepath)   # 保存到文件
     
+# 保存数据到 SQLITE数据库
+def saveDataDB(datalist, dbpath):
+    init_db(dbpath)
+    conn = sqlite3.connect(dbpath)
+    cur = conn.cursor()
+    
+    for data in datalist:
+        for index in range(len(data)):
+            if index == 4 or index ==5:
+                continue
+            data[index] = '"'+data[index]+'"'  # 给每一条数据加上双引号
+        sql = '''
+            insert into movie250 (info_link, pic_link, cname, ename, score, rated, instroduction, info)
+            values(%s)
+        '''%",".join(data)
+        
+        print(sql)
+            
+        cur.execute(sql)   # 执行上边的语句
+        conn.commit()  # 提交数据
+    cur.close()
+    conn.close()
+
+# 初始化数据库
+def init_db(dbpath):
+    # id表示属性名  integer表示属性类型  primary key表示这个属性是主键  autoincrement表示这个值是自动增加的， 默认开始值是1
+    sql = '''
+        create table movie250
+        (
+            id integer primary key autoincrement,  
+            info_link text,
+            pic_link text,
+            cname varchar,
+            ename varchar,
+            score numeric,
+            rated numeric,
+            instroduction text,
+            info text
+            
+        )
+    '''  # 创建数据表
+    conn = sqlite3.connect(dbpath)
+    cursor = conn.cursor()
+    cursor.execute(sql)
+    conn.commit()
+    conn.close()
+
 if __name__ == '__main__':  # 当程序执行时
     # 调用函数
     main()
+    # init_db("movietest.db")
     print("爬取完毕!")

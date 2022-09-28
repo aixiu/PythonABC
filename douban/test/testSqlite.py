@@ -71,9 +71,9 @@ print("成功打开数据库")
 
 c = conn.cursor()  # 获取游戏标
 
-sql1 = "select id, name, address, salary from company"
+sql = "select id, name, address, salary from company"
 
-cursor = c.execute(sql1)  # 执行sql语句
+cursor = c.execute(sql)  # 执行sql语句
 
 for row in cursor:
     print("id = ", row[0])
