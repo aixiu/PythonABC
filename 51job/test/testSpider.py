@@ -34,8 +34,13 @@ keyword = parse.quote(parse.quote(KW))
 pageNum = 1
 
 #主流程
-def main():
-    baseurl = f"https://search.51job.com/list/090200,000000,0000,00,9,99,{keyword},2,{pageNum}.html"  # 基础 URL
+def main(keyword):
+    for pageNum in range(1, 10):
+        baseurl = f"https://search.51job.com/list/090200,000000,0000,00,9,99,{keyword},2,{pageNum}.html"  # 基础 URL
+        
+        pageList = getLink(baseurl)  # 爬取1个列表页，获取该页的全部岗位链接
+        if len(pageList) == 0:
+            break
     # 1.爬取网页
     # datalist = getData(baseurl)
     # savepath = f"./豆瓣电影Top250.xls"
@@ -43,13 +48,22 @@ def main():
     # 3.保存数据到 excel
     # saveData(datalist, savepath)
     
-    html = askURL(baseurl)
+    # html = askURL(baseurl)
     # print(html)
 
 
 # 获取到所有工作岗位链接 
-def getLink():
-    return []    
+def getLink(baseurl):
+    
+    html = askURL(baseurl)  # 获取列表页
+    
+    # html = open("./jobList.html", mode="r", encoding="gbk")
+    bs = BeautifulSoup(html, "html.parser")
+
+    # 详情链接规则
+    findLink = re.compile(r'"job_href":"(.*?)",', re.S)
+    resultList = re.findall(findLink, str(bs))
+    return resultList    
   
 # 得到指定一个 url 的网页内容
 def askURL(url):

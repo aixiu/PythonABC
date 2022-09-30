@@ -5,12 +5,9 @@
 from bs4 import BeautifulSoup
 import re  # 正则表达式，进行文字匹配
 
-html = open("./jobList.html")
+html = open("./jobList.html", mode="r", encoding="gbk")
 bs = BeautifulSoup(html, "html.parser")
 
-# 影片详情链接的规则
-findLink = re.compile(r'<div class="e_icons ick.*?href="(.*?)" target="_blank" class="el">', re.S) 
-
-imgSrc = re.findall(findLink, bs)[0]
-
-print(imgSrc)
+# 详情链接规则
+findLink = re.compile(r'"job_href":"(.*?)",', re.S)
+resultList = re.findall(findLink, str(bs))
