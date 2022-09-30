@@ -52,7 +52,21 @@ def movie():
 
 @app.route('/score')
 def score():
-    return render_template("score.html")
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(BASE_DIR, "movie.db")
+
+    score = []  # 评分
+    num = []  # 每个评分所约计出的电影数量
+    con = sqlite3.connect(db_path)
+    cur = con.cursor()
+    sql = "select score, count(score) from movie250 group by score"
+    data = cur.execute(sql)
+    for item in data:
+        score.append(str(item[0]))
+        num.append(item[1])
+    cur.close()
+    con.close()    
+    return render_template("score.html", score=score, num=num)
 
 @app.route('/word')
 def word():
