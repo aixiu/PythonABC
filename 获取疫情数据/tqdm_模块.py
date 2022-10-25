@@ -90,18 +90,19 @@ for i in data_bar:    # 进度条可以迭代
 # 四、深度学习网络训练中如何有效使用tqdm
 # 比如数据集很大时，我们想实时知道已经训练了多少数据，就可以把data_loader设置为进度条对象，如下面的代码所示：
 
-from tqdm import tqdm
-from torch.utils.data import DataLoader
+# from tqdm import tqdm
+# from torch.utils.data import DataLoader
 
-train_loader=DataLoader(dataset,shuffle=True,batch_size=16)   # 假设已知dataset
-epochs=10
-for epoch in range(epochs):
+# train_loader=DataLoader(dataset,shuffle=True,batch_size=16)   # 假设已知dataset
+# epochs=10
+# for epoch in range(epochs):
     # 此处省略若干步骤
-    train_bar = tqdm(train_loader)   # 实时显示加载了多少数据
-    for step, data in enumerate(train_bar):
+    # train_bar = tqdm(train_loader)   # 实时显示加载了多少数据
+    # for step, data in enumerate(train_bar):
         # 此处省略若干步骤
-        train_bar.desc = f"train epoch [{epoch+1}/{epochs}]   loss= {loss:.3f}"
+        # train_bar.desc = f"train epoch [{epoch+1}/{epochs}]   loss= {loss:.3f}"
 
 
 # output：
+
 # train epoch [1/10]   loss= 1.462:  11%|█         | 23/207 [00:37<05:00,  1.63s/it]
