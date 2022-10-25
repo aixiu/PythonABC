@@ -3,6 +3,7 @@
 #@Author : Aixiu
 
 # 正则表达式: 字符串模式（判断字符串是否符合一定的标准）
+# https://www.bilibili.com/video/BV12E411A7ZQ?p=16&vd_source=20f7c1f5f32f90ae92d9428e45039d9b
 
 import re
 

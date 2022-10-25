@@ -3,6 +3,7 @@
 #@Author : Aixiu
 
 """
+https://www.bilibili.com/video/BV12E411A7ZQ?p=16&vd_source=20f7c1f5f32f90ae92d9428e45039d9b
 BeautifulSoup4将复杂 HTML 文档转换成一个复杂的树形结构，每个节点都是 python 对象，所有对象可以归纳为 4 种：
 
 - Tag
